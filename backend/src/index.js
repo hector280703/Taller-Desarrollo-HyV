@@ -9,7 +9,7 @@ const { createUsers } = require('./config/initialSetup');
 const indexRoutes = require('./routes/index.routes');
 const configEnv = require('./config/configEnv');
 
-const PORT = configEnv.PORT || 3000;
+const PORT = configEnv.PORT || 8080;
 const HOST = configEnv.HOST || 'localhost';
 
 async function setupServer() {
@@ -67,8 +67,14 @@ async function setupServer() {
 		});
 
 		// Iniciar servidor
-		app.listen(PORT, () => {
+		const server = app.listen(PORT, () => {
 			console.log(`=> Servidor corriendo en ${HOST}:${PORT}/api`);
+		});
+
+		// Mantener proceso vivo
+		process.on('SIGINT', () => {
+			console.log('[SHUTDOWN] Cerrando servidor...');
+			server.close(() => process.exit(0));
 		});
 	} catch (error) {
 		console.error('Error en setupServer():', error);
@@ -80,8 +86,8 @@ async function setupAPI() {
 	try {
 		console.log('Iniciando configuración de la API...');
 		await connectDB();
-		await setupServer();
 		await createUsers();
+		await setupServer();
 		console.log('=> API Iniciada exitosamente');
 	} catch (error) {
 		console.error('Error en setupAPI():', error);
@@ -89,4 +95,7 @@ async function setupAPI() {
 	}
 }
 
-setupAPI();
+setupAPI().catch((err) => {
+	console.error('Error fatal:', err);
+	process.exit(1);
+});

@@ -1,9 +1,10 @@
 "use strict";
 const UserSchema = require("../entity/user.entity.js");
-const { AppDataSource } = require("../config/configDB.js");
+const { getAppDataSource } = require("../config/configDB.js");
 
 async function getUserService(query){
     try {
+        const AppDataSource = getAppDataSource();
         const userRepository = AppDataSource.getRepository(UserSchema);
 
         const users = await userRepository.find();

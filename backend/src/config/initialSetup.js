@@ -1,9 +1,10 @@
 "use strict";
 const UserSchema = require("../entity/user.entity.js");
-const { AppDataSource } = require("./configDB");
+const { getAppDataSource } = require("./configDB");
 
 async function createUsers() {
     try {
+        const AppDataSource = getAppDataSource();
         const userRepository = AppDataSource.getRepository(UserSchema);
         const count = await userRepository.count();
         if (count > 0) return; // Si ya hay usuarios, no hacer nada
