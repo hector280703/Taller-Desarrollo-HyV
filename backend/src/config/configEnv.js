@@ -1,6 +1,9 @@
-const path = require('path');
-const fs = require('fs');
-const dotenv = require('dotenv');
+import path from 'path';
+import fs from 'fs';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Intentamos cargar .env desde dos rutas comunes
 const candidatePaths = [
@@ -35,15 +38,16 @@ const env = {
   HOST: norm(process.env.HOST || process.env.DB_HOST, 'localhost'),
   PASSWORD: norm(process.env.PASSWORD || process.env.DB_PASSWORD, ''),
   DB_PORT: Number.parseInt(norm(process.env.DB_PORT, '5432'), 10),
+  PORT: Number.parseInt(norm(process.env.PORT, '8080'), 10),
 };
 
 // Validaciones mínimas (no detenemos el proceso, solo advertimos para facilitar el diagnóstico)
 const missing = Object.entries(env)
-  .filter(([k, v]) => (k === 'DB_PORT' ? Number.isNaN(v) : v === ''))
+  .filter(([k, v]) => (k === 'DB_PORT' || k === 'PORT' ? Number.isNaN(v) : v === ''))
   .map(([k]) => k);
 
 if (missing.length) {
   console.warn('[configEnv] Variables faltantes o inválidas en .env:', missing.join(', '));
 }
 
-module.exports = env;
+export default env;

@@ -1,8 +1,7 @@
-"use strict";
-const UserSchema = require("../entity/user.entity.js");
-const { getAppDataSource } = require("./configDB");
+import UserSchema from "../entity/user.entity.js";
+import { getAppDataSource } from "./configDB.js";
 
-async function createUsers() {
+export async function createUsers() {
     try {
         const AppDataSource = getAppDataSource();
         const userRepository = AppDataSource.getRepository(UserSchema);
@@ -32,5 +31,3 @@ async function createUsers() {
         console.error("Error al crear usuarios iniciales:", error);
     }
 }
-
-module.exports = { createUsers };

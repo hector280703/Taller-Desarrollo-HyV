@@ -1,5 +1,3 @@
-"use strict";
-
 function handleSuccess(res, statusCode, message, data = {}) {
   return res.status(statusCode).json({
     status: "Success",
@@ -23,4 +21,4 @@ function handleErrorServer(res, statusCode, message) {
   });
 }
 
-module.exports = { handleSuccess, handleErrorClient, handleErrorServer };
+export { handleSuccess, handleErrorClient, handleErrorServer };

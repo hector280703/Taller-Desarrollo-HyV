@@ -1,12 +1,12 @@
-"use strict";
-const { DataSource } = require("typeorm");
-const UserSchema = require("../entity/user.entity");
+import { DataSource } from "typeorm";
+import UserSchema from "../entity/user.entity.js";
+import configEnv from "./configEnv.js";
 
 let AppDataSource = null;
 
-function getAppDataSource() {
+export function getAppDataSource() {
   if (!AppDataSource) {
-    const { DATABASE, DB_USERNAME, HOST, PASSWORD, DB_PORT } = require("./configEnv");
+    const { DATABASE, DB_USERNAME, HOST, PASSWORD, DB_PORT } = configEnv;
     
     AppDataSource = new DataSource({
       type: "postgres",
@@ -23,7 +23,7 @@ function getAppDataSource() {
   return AppDataSource;
 }
 
-async function connectDB() {
+export async function connectDB() {
   try {
     const ds = getAppDataSource();
     await ds.initialize();
@@ -33,5 +33,3 @@ async function connectDB() {
     process.exit(1);
   }
 }
-
-module.exports = { getAppDataSource, connectDB };

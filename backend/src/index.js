@@ -1,13 +1,13 @@
-const express = require('express');
-const cors = require('cors');
-const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
 
-const { connectDB } = require('./config/configDB');
-const { createUsers } = require('./config/initialSetup');
-const indexRoutes = require('./routes/index.routes');
-const configEnv = require('./config/configEnv');
+import { connectDB } from './config/configDB.js';
+import { createUsers } from './config/initialSetup.js';
+import indexRoutes from './routes/index.routes.js';
+import configEnv from './config/configEnv.js';
 
 const PORT = configEnv.PORT || 8080;
 const HOST = configEnv.HOST || 'localhost';
@@ -22,9 +22,9 @@ async function setupServer() {
 		// CORS configurado para frontend local
 		app.use(
 			cors({
-				origin: 'http://localhost:5173',
+				origin: ['http://localhost:5173', 'http://localhost:8080'],
 				credentials: true,
-				methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+				methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
 				allowedHeaders: ['Content-Type', 'Authorization'],
 			})
 		);
@@ -61,7 +61,7 @@ async function setupServer() {
 			res.status(200).send('API running');
 		});
 
-		// 404 - No encontrado
+		// 404 - No encontrado (debe ser el ÚLTIMO middleware)
 		app.use((req, res) => {
 			res.status(404).json({ status: 'Not Found', path: req.originalUrl });
 		});

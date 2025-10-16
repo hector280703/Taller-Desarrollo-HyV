@@ -1,5 +1,4 @@
-"use strict";
-const { EntitySchema } = require("typeorm");
+import { EntitySchema } from "typeorm";
 
 const UserSchema = new EntitySchema({
   name: "User",
@@ -45,4 +44,4 @@ const UserSchema = new EntitySchema({
   },
 });
 
-module.exports = UserSchema;
+export default UserSchema;
